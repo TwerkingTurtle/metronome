@@ -12,6 +12,8 @@ var beatmeasures = 2;
 let womp = document.getElementById("measures").childElementCount;
 
 function playTakSound() {
+
+    makebabies();
     
     if(isplaying) {
 
@@ -48,7 +50,7 @@ function playTakSound() {
             
             taksound.play();
 
-            if(beat < Number(document.getElementById("timesig").innerHTML.slice(0, 1))) {
+            if(beat < Number(document.getElementById("timesig").innerHTML.slice(0, document.getElementById("timesig").innerHTML.indexOf("/")))) {
 
                 if ( beat != 0 ) { document.getElementById(beat).style.backgroundColor = "#A8C69F"; }
                 beat += 1;
@@ -58,9 +60,9 @@ function playTakSound() {
 
             } else {
 
+                document.getElementById(beat).style.backgroundColor = "#A8C69F";
                 beat = 1;
-                document.getElementById(4).style.backgroundColor = "#A8C69F";
-                document.getElementById(1).style.backgroundColor = "#00171F";
+                document.getElementById(beat).style.backgroundColor = "#00171F";
                 
                 document.getElementById("beats").children[beat - 1].scrollIntoView({ block: "center" });
                 document.getElementById("beats").children[beat].scrollIntoView({ behavior: "smooth", block: "center" });
@@ -72,68 +74,87 @@ function playTakSound() {
 
             }
         
-        }, 60000/Number(document.getElementById("bpmcount").innerHTML)/Number(document.getElementById("timesig").innerHTML.slice(2, 3))*document.getElementById("beatsperbeat").innerHTML);
+        }, 60000/Number(document.getElementById("bpmcount").innerHTML)/Number(document.getElementById("timesig").innerHTML.slice(document.getElementById("timesig").innerHTML.indexOf("/") + 1, document.getElementById("timesig").innerHTML.length))*document.getElementById("beatsperbeat").innerHTML);
 
     }
 
 }
 
-function prance() {
-    switch (true) {
+function makebabies() {
 
-        case bpmcount < 25:
+    document.getElementById("dots").innerHTML = "";
+    document.getElementById("beats").innerHTML = "";
 
-            document.getElementById("bpmname").innerHTML = "Larghissimo";
-            break;
+    for ( let i = 0; i < Number(document.getElementById("timesig").innerHTML.slice(0, document.getElementById("timesig").innerHTML.indexOf("/"))); i++ ) {
 
-        case bpmcount >= 25 && bpmcount < 40:
-
-            document.getElementById("bpmname").innerHTML = "Grave";
-            break;
-
-        case bpmcount >= 40 && bpmcount < 60:
-
-            document.getElementById("bpmname").innerHTML = "Lento";
-            break;
-
-        case bpmcount >= 60 && bpmcount < 80:
-
-            document.getElementById("bpmname").innerHTML = "Andante";
-            break;
-        
-        case bpmcount >= 80 && bpmcount < 100:
-
-            document.getElementById("bpmname").innerHTML = "Moderato";
-            break;
-        
-        case bpmcount >= 100 && bpmcount < 120:
-
-            document.getElementById("bpmname").innerHTML = "Allegretto";
-            break;
-
-        case bpmcount >= 120 && bpmcount < 150:
-
-            document.getElementById("bpmname").innerHTML = "Allegro";
-            break;
-
-        case bpmcount >= 150 && bpmcount < 180:
-
-            document.getElementById("bpmname").innerHTML = "Vivace";
-            break;
-
-        case bpmcount >= 190 && bpmcount < 200:
-
-            document.getElementById("bpmname").innerHTML = "Presto";
-            break;
-        
-        case bpmcount => 200:
-
-            document.getElementById("bpmname").innerHTML = "Prestissimo";
-            break;
-
-        default:
-        
-            break;
+        document.getElementById("dots").innerHTML += `<span class = "dot" id = "${i+1}"></span>`;
 
     }
+
+    for ( let i = 0; i < Number(document.getElementById("timesig").innerHTML.slice(0, document.getElementById("timesig").innerHTML.indexOf("/"))) + 1; i++ ) {
+
+        document.getElementById("beats").innerHTML += `<text style = "font-size: 20px;">${i}</text>`;
+
+    }
+
+}
+
+var bpmcount = document.getElementById("bpmcount").innerHTML;
+
+switch (true) {
+
+    case bpmcount < 25:
+
+        document.getElementById("bpmname").innerHTML = "Larghissimo";
+        break;
+
+    case bpmcount >= 25 && bpmcount < 40:
+
+        document.getElementById("bpmname").innerHTML = "Grave";
+        break;
+
+    case bpmcount >= 40 && bpmcount < 60:
+
+        document.getElementById("bpmname").innerHTML = "Lento";
+        break;
+
+    case bpmcount >= 60 && bpmcount < 80:
+
+        document.getElementById("bpmname").innerHTML = "Andante";
+        break;
+    
+    case bpmcount >= 80 && bpmcount < 100:
+
+        document.getElementById("bpmname").innerHTML = "Moderato";
+        break;
+    
+    case bpmcount >= 100 && bpmcount < 120:
+
+        document.getElementById("bpmname").innerHTML = "Allegretto";
+        break;
+
+    case bpmcount >= 120 && bpmcount < 150:
+
+        document.getElementById("bpmname").innerHTML = "Allegro";
+        break;
+
+    case bpmcount >= 150 && bpmcount < 180:
+
+        document.getElementById("bpmname").innerHTML = "Vivace";
+        break;
+
+    case bpmcount >= 190 && bpmcount < 200:
+
+        document.getElementById("bpmname").innerHTML = "Presto";
+        break;
+    
+    case bpmcount => 200:
+
+        document.getElementById("bpmname").innerHTML = "Prestissimo";
+        break;
+
+    default:
+    
+        break;
+
 }
