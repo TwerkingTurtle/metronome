@@ -73,8 +73,14 @@ function playTakSound() {
                 document.getElementById("measures").children[beatmeasures - 2].scrollIntoView({ behavior: "smooth", block: "center" });
 
             }
+
+            // updated timer to adjust for beatsperbeat
+            // edit dot to flash on the same beatnote [ e.g. quavers ]
+            // implement feature for 1 + 2 + counting instead of rigid 1 2 3 4
+            // when sequencer
+            // when saving sharing editing
         
-        }, 60000/Number(document.getElementById("bpmcount").innerHTML)/Number(document.getElementById("timesig").innerHTML.slice(document.getElementById("timesig").innerHTML.indexOf("/") + 1, document.getElementById("timesig").innerHTML.length))*document.getElementById("beatsperbeat").innerHTML);
+        }, 60000/Number(document.getElementById("bpmcount").innerHTML)/Number(document.getElementById("timesig").innerHTML.slice(document.getElementById("timesig").innerHTML.indexOf("/") + 1, document.getElementById("timesig").innerHTML.length))*document.getElementById("beatsperbeat").innerHTML)/4*Number(document.getElementById("beatsperbeat").innerHTML);
 
     }
 
