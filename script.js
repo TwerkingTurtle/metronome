@@ -3,11 +3,14 @@ var isplaying = false;
 var metronome = null;
 
 /*
+// add sequencer!!
+
 var seqname = document.getElementById("name").innerHTML;
 var seqmeasure = document.getElementById("totalmeasure").innerHTML;
 */
 
-var beat = 0;
+var beatcount = 0;
+var beatplus = 0;
 var override = 0;
 var beatmeasures = 2;
 let womp = document.getElementById("measures").childElementCount;
@@ -34,7 +37,8 @@ function playTakSound() {
         document.getElementById("player").style.backgroundColor = "#2176FF";
         document.getElementById("player").style.borderColor = "#3993DD";
         
-        beat = 0;
+        beatcount = 0;
+        beatplus = 0;
         beatmeasures = 2;
 
         for (let dot of document.getElementsByClassName("dot")) { dot.style.backgroundColor = "#A8C69F"; }
@@ -51,28 +55,35 @@ function playTakSound() {
             
             taksound.play();
 
-            if ( beat < Number( document.getElementById("timesig").innerHTML.slice( 0, document.getElementById("timesig").innerHTML.indexOf("/") ) ) ) {
+            if ( beatcount < Number( document.getElementById("timesig").innerHTML.slice( 0, document.getElementById("timesig").innerHTML.indexOf("/") ) ) || beatplus % 2 == 1 ) {
 
-                if ( beat != 0 ) { document.getElementById(beat).style.backgroundColor = "#A8C69F"; }
+                if ( beatcount != 0 ) { document.getElementById(beatcount).style.backgroundColor = "#A8C69F"; }
+
+                override += 4 / Number( document.getElementById("beatsperbeat").innerHTML.replace("<br>", "") );
+
+                if ( override >= 1 ) { override = 0; beatcount += 1; }
                 
-                // new implementation [ not working ]
-                override += 4 / Number( document.getElementById("beatsperbeat").innerHTML );
+                if ( beatcount == 0 ) { beatcount += 1; override = 0; }
 
-                if ( override == 1 ) { override = 0; beat += 1; }
-                
-                document.getElementById(beat).style.backgroundColor = "#00171F";
+                beatplus++;
 
-                document.getElementById("beats").children[beat].scrollIntoView({ behavior: "smooth", block: "center" });
+                document.getElementById(beatcount).style.backgroundColor = "#00171F";
+
+                document.getElementById("beats").children[beatplus].scrollIntoView({ behavior: "smooth", block: "center" });
 
             } else {
 
-                document.getElementById(beat).style.backgroundColor = "#A8C69F";
-                beat = 1;
-                document.getElementById(beat).style.backgroundColor = "#00171F";
+                document.getElementById(beatcount).style.backgroundColor = "#A8C69F";
+
+                beatcount = 1;
+                beatplus = 1;
+                override = 0;
+
+                document.getElementById(beatcount).style.backgroundColor = "#00171F";
                 
-                document.getElementById("beats").children[beat - 1].scrollIntoView({ block: "center" });
-                document.getElementById("beats").children[beat].scrollIntoView({ behavior: "smooth", block: "center" });
-            
+                document.getElementById("beats").children[beatcount - 1].scrollIntoView({ block: "center" });
+                document.getElementById("beats").children[beatplus].scrollIntoView({ behavior: "smooth", block: "center" });
+
                 beatmeasures += 1;
 
                 document.getElementById("measures").innerHTML += `<text>${beatmeasures}</text>`;
@@ -80,13 +91,26 @@ function playTakSound() {
 
             }
 
-            // updated timer to adjust for beatsperbeat [ override ]                Y
-            // edit dot to flash on the same beatnote [ e.g. quavers ]              失敗    dots move on despite +
-            // implement feature for 1 + 2 + counting instead of rigid 1 2 3 4      Y
-            // when sequencer                                                       N
-            // when saving sharing editing                                          N
-        
-        }, 60000/Number(document.getElementById("bpmcount").innerHTML)/Number(document.getElementById("timesig").innerHTML.slice(document.getElementById("timesig").innerHTML.indexOf("/") + 1, document.getElementById("timesig").innerHTML.length))*document.getElementById("beatsperbeat").innerHTML)/4*Number(document.getElementById("beatsperbeat").innerHTML);
+            /*
+
+                SIMPLE TIME
+
+                [ requires support for different toned beat sounds ]
+
+                add support for breve beats             N
+                add support for semibreve beats         N
+                add support for minim beats             N
+
+                add support for crotchet beats          Y
+                add support for quaver beats            Y
+
+                add support for triplet beats           N
+                add support for semiquaver beats        N
+
+            */
+
+        }, 60000/Number(document.getElementById("bpmcount").innerHTML)/Number(document.getElementById("timesig").innerHTML.slice(document.getElementById("timesig").innerHTML.indexOf("/") + 1, document.getElementById("timesig").innerHTML.length))*4/Number( document.getElementById("beatsperbeat").innerHTML.replace("<br>", "") )*4);
+            // 60s / bpm / type of beat * 4 / beat type * 4
 
     }
 
@@ -107,12 +131,13 @@ function makebabies() {
 
         // new implementation [ not working ]
         document.getElementById("beats").innerHTML += `<text style = "font-size: 20px;">${i}</text>`;
-        if ( document.getElementById("beatsperbeat").innerHTML != 4 ) { document.getElementById("beats").innerHTML += `<text style = "font-size: 20px;">+</text>`; }
+        if ( document.getElementById("beatsperbeat").innerHTML != 4 && i != 0 ) { document.getElementById("beats").innerHTML += `<text style = "font-size: 20px;">+</text>`; }
 
     }
 
 }
 
+// fix this shit
 var bpmcount = document.getElementById("bpmcount").innerHTML;
 
 switch (true) {
