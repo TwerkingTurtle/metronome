@@ -8,6 +8,7 @@ var seqmeasure = document.getElementById("totalmeasure").innerHTML;
 */
 
 var beat = 0;
+var override = 0;
 var beatmeasures = 2;
 let womp = document.getElementById("measures").childElementCount;
 
@@ -50,10 +51,14 @@ function playTakSound() {
             
             taksound.play();
 
-            if(beat < Number(document.getElementById("timesig").innerHTML.slice(0, document.getElementById("timesig").innerHTML.indexOf("/")))) {
+            if ( beat < Number( document.getElementById("timesig").innerHTML.slice( 0, document.getElementById("timesig").innerHTML.indexOf("/") ) ) ) {
 
                 if ( beat != 0 ) { document.getElementById(beat).style.backgroundColor = "#A8C69F"; }
-                beat += 1;
+                
+                override += 4 / Number( document.getElementById("beatsperbeat").innerHTML );
+
+                if ( override == 1 ) { override = 0; beat += 1; }
+                
                 document.getElementById(beat).style.backgroundColor = "#00171F";
 
                 document.getElementById("beats").children[beat].scrollIntoView({ behavior: "smooth", block: "center" });
@@ -74,11 +79,11 @@ function playTakSound() {
 
             }
 
-            // updated timer to adjust for beatsperbeat
-            // edit dot to flash on the same beatnote [ e.g. quavers ]
-            // implement feature for 1 + 2 + counting instead of rigid 1 2 3 4
-            // when sequencer
-            // when saving sharing editing
+            // updated timer to adjust for beatsperbeat [ override ]                Y
+            // edit dot to flash on the same beatnote [ e.g. quavers ]              Y
+            // implement feature for 1 + 2 + counting instead of rigid 1 2 3 4      Y
+            // when sequencer                                                       N
+            // when saving sharing editing                                          N
         
         }, 60000/Number(document.getElementById("bpmcount").innerHTML)/Number(document.getElementById("timesig").innerHTML.slice(document.getElementById("timesig").innerHTML.indexOf("/") + 1, document.getElementById("timesig").innerHTML.length))*document.getElementById("beatsperbeat").innerHTML)/4*Number(document.getElementById("beatsperbeat").innerHTML);
 
@@ -91,15 +96,16 @@ function makebabies() {
     document.getElementById("dots").innerHTML = "";
     document.getElementById("beats").innerHTML = "";
 
-    for ( let i = 0; i < Number(document.getElementById("timesig").innerHTML.slice(0, document.getElementById("timesig").innerHTML.indexOf("/"))); i++ ) {
+    for ( let i = 0; i < Number( document.getElementById("timesig").innerHTML.slice( 0, document.getElementById("timesig").innerHTML.indexOf("/") ) ); i++ ) {
 
         document.getElementById("dots").innerHTML += `<span class = "dot" id = "${i+1}"></span>`;
 
     }
 
-    for ( let i = 0; i < Number(document.getElementById("timesig").innerHTML.slice(0, document.getElementById("timesig").innerHTML.indexOf("/"))) + 1; i++ ) {
+    for ( let i = 0; i < Number( document.getElementById("timesig").innerHTML.slice( 0, document.getElementById("timesig").innerHTML.indexOf("/") ) ) + 1; i++ ) {
 
         document.getElementById("beats").innerHTML += `<text style = "font-size: 20px;">${i}</text>`;
+        if ( document.getElementById("beatsperbeat").innerHTML != 4 ) { document.getElementById("beats").innerHTML += `<text style = "font-size: 20px;">+</text>`; }
 
     }
 
