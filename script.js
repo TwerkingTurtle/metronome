@@ -55,6 +55,7 @@ function playTakSound() {
 
                 if ( beat != 0 ) { document.getElementById(beat).style.backgroundColor = "#A8C69F"; }
                 
+                // new implementation [ not working ]
                 override += 4 / Number( document.getElementById("beatsperbeat").innerHTML );
 
                 if ( override == 1 ) { override = 0; beat += 1; }
@@ -80,7 +81,7 @@ function playTakSound() {
             }
 
             // updated timer to adjust for beatsperbeat [ override ]                Y
-            // edit dot to flash on the same beatnote [ e.g. quavers ]              Y
+            // edit dot to flash on the same beatnote [ e.g. quavers ]              失敗    dots move on despite +
             // implement feature for 1 + 2 + counting instead of rigid 1 2 3 4      Y
             // when sequencer                                                       N
             // when saving sharing editing                                          N
@@ -104,6 +105,7 @@ function makebabies() {
 
     for ( let i = 0; i < Number( document.getElementById("timesig").innerHTML.slice( 0, document.getElementById("timesig").innerHTML.indexOf("/") ) ) + 1; i++ ) {
 
+        // new implementation [ not working ]
         document.getElementById("beats").innerHTML += `<text style = "font-size: 20px;">${i}</text>`;
         if ( document.getElementById("beatsperbeat").innerHTML != 4 ) { document.getElementById("beats").innerHTML += `<text style = "font-size: 20px;">+</text>`; }
 
